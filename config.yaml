@@ -1,0 +1,86 @@
+# GPS Trajectory Location Prediction System Configuration
+
+# Data configuration
+data:
+  geolife_path: "data/geolife.csv"
+  poi_path: "data/poi.csv"
+  glove_path: "data/glove.6B.200d.txt"
+  max_sequence_length: 100
+  min_stay_points: 200
+  user_limit: null  # Set to integer to limit number of users for testing
+
+# Preprocessing configuration
+preprocessing:
+  stay_point:
+    time_threshold: 5.0      # Minutes
+    distance_threshold: 200.0 # Meters
+  poi_matching:
+    k: 1                     # Number of nearest neighbors
+    max_distance: 500.0      # Maximum distance for POI matching (meters)
+
+# Embedding configuration
+embedding:
+  embedding_dim: 200
+  tfidf:
+    min_df: 1               # Minimum document frequency
+    max_df: 1.0             # Maximum document frequency
+
+# Model architecture configuration
+model:
+  cnn:
+    num_heads: 4
+    kernel_sizes: [3, 5, 7, 9]
+    num_filters: 64
+    dropout_rate: 0.2
+  gru:
+    hidden_dim: 128
+    num_layers: 2
+    dropout_rate: 0.2
+    se_reduction_ratio: 16
+  classifier:
+    dropout_rate: 0.3
+
+# Training configuration
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  epochs: 100
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+  scheduler:
+    type: "ReduceLROnPlateau"  # Options: "StepLR", "ReduceLROnPlateau"
+    factor: 0.5
+    patience: 5
+    # For StepLR:
+    # step_size: 10
+    # gamma: 0.1
+
+# Evaluation configuration
+evaluation:
+  checkpoint_dir: "checkpoints"
+  results_dir: "results"
+  save_best_only: true
+
+# Logging configuration
+logging:
+  level: "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null  # Set to filename to log to file
+
+# Visualization configuration
+visualization:
+  figsize: [12, 8]
+  dpi: 300
+  style: "seaborn"
+  color_palette: "husl"
+
+# Hardware configuration
+hardware:
+  device: "auto"  # Options: "auto", "cpu", "cuda", "cuda:0", etc.
+  num_workers: 4  # Number of workers for data loading
+  pin_memory: true  # Pin memory for faster GPU transfer
